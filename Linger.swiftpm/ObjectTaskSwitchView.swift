@@ -1,6 +1,5 @@
 import SwiftUI
 
-// MARK: - 数据模型与分类
 enum ItemCategory: String, CaseIterable {
     case kitchen = "Kitchen"
     case food = "Food"
@@ -16,7 +15,6 @@ struct CategorizedItem: Identifiable, Hashable {
 }
 
 class ObjectTaskSwitchViewModel: ObservableObject {
-    // 模拟带有分类的本地数据库
     let allItems: [CategorizedItem] = [
         CategorizedItem(name: "Fork", category: .kitchen, imageName: "fork.knife", isSystemImage: true),
         CategorizedItem(name: "Frying Pan", category: .kitchen, imageName: "frying.pan.fill", isSystemImage: true),
@@ -36,11 +34,9 @@ class ObjectTaskSwitchViewModel: ObservableObject {
     let maxProgress: Int = 10
     @Published var feedbackMessage: String = ""
     
-    // Task A (命名) 状态
     @Published var taskAItem: CategorizedItem?
     @Published var taskAOptions: [String] = []
     
-    // Task B (分类) 状态
     @Published var taskBTargetCategory: ItemCategory = .kitchen
     @Published var taskBGridItems: [CategorizedItem] = []
     @Published var taskBSelectedIDs: Set<UUID> = []
@@ -122,7 +118,6 @@ class ObjectTaskSwitchViewModel: ObservableObject {
     }
 }
 
-// MARK: - 主视图 (黑橙护眼版)
 struct ObjectTaskSwitchView: View {
     @EnvironmentObject var state: AppState
     @Environment(\.presentationMode) var presentationMode
@@ -156,7 +151,6 @@ struct ObjectTaskSwitchView: View {
         }
     }
     
-    // MARK: - 顶部导航与帮助
     var topNavBar: some View {
         HStack {
             Button(action: { presentationMode.wrappedValue.dismiss() }) {
@@ -174,7 +168,6 @@ struct ObjectTaskSwitchView: View {
         .padding()
     }
     
-    // MARK: - Learn Mode
     var learnPhaseView: some View {
         VStack(spacing: 20) {
             Text("Review Categories")
@@ -222,8 +215,7 @@ struct ObjectTaskSwitchView: View {
             }
         }
     }
-    
-    // MARK: - Training Phase
+
     var trainingPhaseView: some View {
         VStack(spacing: 20) {
             Button(action: {
@@ -317,7 +309,6 @@ struct ObjectTaskSwitchView: View {
                     .frame(maxWidth: .infinity).padding().background(Color.green).foregroundColor(.white).cornerRadius(16)
             }.padding(.horizontal, 40)
         }
-        // 替换为：
         .onAppear { 
             state.speak("Great session! You did wonderful work.")
             UserDefaults.standard.set(UserDefaults.standard.integer(forKey: "progressTaskSwitch") + 1, forKey: "progressTaskSwitch")

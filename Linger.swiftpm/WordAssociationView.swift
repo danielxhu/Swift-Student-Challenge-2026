@@ -1,6 +1,6 @@
 import SwiftUI
 
-// MARK: - 数据模型
+
 struct WordAssociationTask: Identifiable {
     let id = UUID()
     let coreObject: String
@@ -11,7 +11,7 @@ struct WordAssociationTask: Identifiable {
 }
 
 class WordAssociationViewModel: ObservableObject {
-    // 模拟本地语义网络数据库
+
     let allTasks: [WordAssociationTask] = [
         WordAssociationTask(
             coreObject: "Dog",
@@ -56,10 +56,10 @@ class WordAssociationViewModel: ObservableObject {
         feedbackMessage = ""
         selectedWords.removeAll()
         
-        // 随机抽取一个任务
+
         currentTask = allTasks.randomElement()
         
-        // 准备测试用的词汇网格（所有相关词 + 提取部分干扰词，并打乱顺序）
+
         if let task = currentTask {
             let distractors = Array(task.distractorWords.shuffled().prefix(4))
             testWords = (task.relatedWords + distractors).shuffled()
@@ -75,25 +75,24 @@ class WordAssociationViewModel: ObservableObject {
         guard let task = currentTask else { return }
         
         if task.relatedWords.contains(word) {
-            // 正确选择
+
             selectedWords.insert(word)
             feedbackMessage = ["Well done!", "Great job!", "Perfect!"].randomElement()!
             
-            // 检查是否找齐了所有的相关词汇
+
             if selectedWords.count == task.relatedWords.count {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                     self.phase = .success
                 }
             }
         } else {
-            // 错误选择：零惩罚
+
             feedbackMessage = "Let's try another choice! Take all the time you need."
         }
     }
 }
 
-// MARK: - 主视图
-// MARK: - 主视图 (黑橙护眼版)
+
 struct WordAssociationView: View {
     @EnvironmentObject var state: AppState
     @Environment(\.presentationMode) var presentationMode
@@ -158,7 +157,7 @@ struct WordAssociationView: View {
                             .font(.system(size: state.fontSize(28), weight: .bold))
                             .frame(maxWidth: .infinity).padding()
                             .background(darkGrayCard)
-                            .foregroundColor(deepOrange) // 相关词用橙色高亮
+                            .foregroundColor(deepOrange) 
                             .cornerRadius(16)
                             .overlay(RoundedRectangle(cornerRadius: 16).stroke(deepOrange.opacity(0.3), lineWidth: 2))
                     }

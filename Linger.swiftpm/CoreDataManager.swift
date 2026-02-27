@@ -6,7 +6,6 @@ class CoreDataManager {
     let container: NSPersistentContainer
     
     init() {
-        // 纯代码定义模型
         let entity = NSEntityDescription()
         entity.name = "FamilyMember"
         entity.managedObjectClassName = "FamilyMember"

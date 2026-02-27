@@ -2,7 +2,7 @@ import SwiftUI
 import PhotosUI
 import CoreData
 
-// MARK: - 🌟 全模块临床高阶指标引擎 (Global Metrics Engine)
+
 struct SessionMetric: Codable, Identifiable {
     var id = UUID()
     var time: Double
@@ -30,14 +30,14 @@ class MetricsStore: ObservableObject {
     func addSession(module: String, time: Double, accuracy: Double) {
         var metrics = history[module] ?? []
         metrics.append(SessionMetric(time: time, accuracy: accuracy))
-        if metrics.count > 5 { metrics.removeFirst() } // 永远只保留最近5次
+        if metrics.count > 5 { metrics.removeFirst() }
         history[module] = metrics
     }
     
     func resetMetrics() { history.removeAll() }
 }
 
-// MARK: - Tab 3: 家属区与成果追踪
+
 struct FamilyProgressView: View {
     @EnvironmentObject var state: AppState
     @Environment(\.managedObjectContext) var context
@@ -65,7 +65,7 @@ struct FamilyProgressView: View {
     let deepOrange = Color(red: 0.85, green: 0.4, blue: 0.0)
     let darkGrayCard = Color(white: 0.15)
     
-    // 我们要追踪并在看板显示的模块列表
+
     let trackableModules = [
         ("Math Fitness", "MathFitness"),
         ("Sequence Tracking", "SequenceTracking"),
@@ -97,7 +97,7 @@ struct FamilyProgressView: View {
                             }.tint(deepOrange)
                         }.listRowBackground(darkGrayCard)
                         
-                        // 🌟 全模块最近5次性能面板
+
                         Section(header: Text("CLINICAL METRICS (LAST 5 SESSIONS)").foregroundColor(deepOrange).font(.subheadline)) {
                             if metricsStore.history.isEmpty {
                                 Text("No advanced tracking data yet.").foregroundColor(.gray)

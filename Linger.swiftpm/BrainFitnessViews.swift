@@ -3,7 +3,6 @@ import SwiftUI
 let deepOrange = Color(red: 0.85, green: 0.4, blue: 0.0)
 let darkGrayCard = Color(white: 0.15)
 
-// MARK: - 1. 空间记忆 (Spatial Memory)
 struct SpatialMemoryView: View {
     @EnvironmentObject var state: AppState
     @Environment(\.presentationMode) var presentationMode
@@ -118,7 +117,6 @@ struct SpatialMemoryView: View {
     }
 }
 
-// MARK: - 2. 视觉搜索 (Visual Focus)
 struct VisualSearchView: View {
     @EnvironmentObject var state: AppState
     @Environment(\.presentationMode) var presentationMode
@@ -219,7 +217,6 @@ struct VisualSearchView: View {
     }
 }
 
-// MARK: - 3. 数学健脑 (Math Fitness)
 struct MathFitnessView: View {
     @EnvironmentObject var state: AppState
     @Environment(\.presentationMode) var presentationMode
@@ -312,7 +309,6 @@ struct MathFitnessView: View {
         options = Array(opts).shuffled()
         
         if isErrorlessModeEnabled {
-            // 🌟 这里的等待时间已设定为精准的 10 秒
             DispatchQueue.main.asyncAfter(deadline: .now() + 10.0) {
                 if !self.isSuccess {
                     self.showHint = true
@@ -347,7 +343,7 @@ struct MathFitnessView: View {
     }
 }
 
-// MARK: - 4. 每日嗅觉小任务 (Daily Senses)
+
 struct DailySmellTaskView: View {
     @EnvironmentObject var state: AppState
     @Environment(\.presentationMode) var presentationMode
@@ -464,7 +460,6 @@ struct DailySmellTaskView: View {
     }
 }
 
-// MARK: - 5. 循迹追踪 (Sequential Working Memory)
 struct SequentialMemoryView: View {
     @EnvironmentObject var state: AppState
     @Environment(\.presentationMode) var presentationMode
@@ -645,7 +640,6 @@ struct SequentialMemoryView: View {
     }
 }
 
-// MARK: - 共用组件
 @ViewBuilder 
 func topBar(title: String) -> some View {
     HStack {

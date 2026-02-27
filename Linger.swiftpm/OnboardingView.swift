@@ -2,14 +2,14 @@ import SwiftUI
 
 struct OnboardingView: View {
     @EnvironmentObject var state: AppState
-    @State private var currentStep = 1 // 1: Text Size, 2: Voice
+    @State private var currentStep = 1
     
     var body: some View {
         ZStack {
-            Color.white.ignoresSafeArea() // 强制白色背景，确保高对比度
+            Color.white.ignoresSafeArea() 
             
             VStack(spacing: 40) {
-                // 顶部进度指示
+
                 HStack {
                     Circle()
                         .fill(currentStep == 1 ? Color.blue : Color.gray.opacity(0.3))
@@ -32,11 +32,10 @@ struct OnboardingView: View {
         }
     }
     
-    // MARK: - Step 1: 字体大小选择
     var textSizeStep: some View {
         VStack(spacing: 30) {
             Text("Welcome!")
-                .font(.system(size: 40, weight: .bold)) // 特大标题
+                .font(.system(size: 40, weight: .bold))
                 .foregroundColor(.black)
             
             Text("Let's set up your screen.")
@@ -44,10 +43,10 @@ struct OnboardingView: View {
                 .foregroundColor(.gray)
                 .multilineTextAlignment(.center)
             
-            // 实时预览区域
+
             VStack {
                 Text("This is how text will look.")
-                    .font(.system(size: state.fontSize(24))) // 应用动态字号
+                    .font(.system(size: state.fontSize(24))) 
                     .padding()
                     .frame(maxWidth: .infinity)
                     .background(Color.blue.opacity(0.1))
@@ -55,7 +54,7 @@ struct OnboardingView: View {
             }
             .padding(.horizontal)
             
-            // 字号选择按钮
+
             VStack(spacing: 20) {
                 sizeButton(label: "Large Text", adjustment: 0)
                 sizeButton(label: "Extra Large", adjustment: 4)
@@ -76,7 +75,6 @@ struct OnboardingView: View {
         }
     }
     
-    // MARK: - Step 2: 语音设置
     var voiceStep: some View {
         VStack(spacing: 30) {
             Text("Voice Guidance")
@@ -87,8 +85,7 @@ struct OnboardingView: View {
                 .font(.system(size: state.fontSize(24)))
                 .multilineTextAlignment(.center)
                 .padding()
-            
-            // 巨大的开关按钮
+
             Button(action: { state.isVoiceEnabled.toggle() }) {
                 HStack {
                     Text(state.isVoiceEnabled ? "Voice is ON" : "Voice is OFF")
@@ -108,7 +105,7 @@ struct OnboardingView: View {
             }
             .foregroundColor(.black)
             
-            // 试听按钮
+
             if state.isVoiceEnabled {
                 Button(action: { state.speak("Hello! I am ready to help you train.") }) {
                     Label("Tap to Test Voice", systemImage: "play.circle.fill")
@@ -122,9 +119,9 @@ struct OnboardingView: View {
             
             Spacer()
             
-            // 完成设置按钮
+
             Button(action: {
-                // 保存状态，触发 ContentView 切换到 MainTabView
+
                 state.hasCompletedOnboarding = true 
             }) {
                 Text("Start Training!")
@@ -138,12 +135,12 @@ struct OnboardingView: View {
         }
     }
     
-    // 辅助组件：字号按钮
+
     func sizeButton(label: String, adjustment: Double) -> some View {
         Button(action: { state.textSizeAdjustment = adjustment }) {
             HStack {
                 Text(label)
-                    .font(.system(size: 24 + adjustment)) // 按钮文字本身也随之变大
+                    .font(.system(size: 24 + adjustment)) 
                 Spacer()
                 if state.textSizeAdjustment == adjustment {
                     Image(systemName: "checkmark.circle.fill")

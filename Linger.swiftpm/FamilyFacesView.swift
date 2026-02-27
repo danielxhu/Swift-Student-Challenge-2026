@@ -382,7 +382,7 @@ struct FamilyFacesView: View {
         .overlay(Circle().stroke(shouldGlow ? Color.green : Color.clear, lineWidth: shouldGlow ? 6 : 0))
         .shadow(color: shouldGlow ? Color.green.opacity(0.6) : Color.clear, radius: 15)
         .scaleEffect(shouldGlow ? 1.05 : 1.0)
-        .animation(shouldGlow ? .easeInOut(duration: 0.5).repeatForever(autoreverses: true) : .default, value: shouldGlow)
+        .animation(shouldGlow ? Animation.easeInOut(duration: 0.5).repeatForever(autoreverses: true) : .default, value: shouldGlow)
     }
     
     func textOptionButton(text: String, shouldGlow: Bool, action: @escaping () -> Void) -> some View {
@@ -394,6 +394,6 @@ struct FamilyFacesView: View {
                 .shadow(color: shouldGlow ? Color.green.opacity(0.6) : Color.clear, radius: 10)
         }
         .scaleEffect(shouldGlow ? 1.05 : 1.0)
-        .animation(shouldGlow ? .easeInOut(duration: 0.5).repeatForever(autoreverses: true) : .default, value: shouldGlow)
+        .animation(shouldGlow ? Animation.easeInOut(duration: 0.5).repeatForever(autoreverses: true) : .default, value: shouldGlow)
     }
 }

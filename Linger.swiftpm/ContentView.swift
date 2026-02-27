@@ -1,49 +1,117 @@
 import SwiftUI
 
+
 struct ContentView: View {
-    @StateObject var state = AppState()
-    // 🌟 监听 App 的当前状态（前台、后台、非活跃）
-    @Environment(\.scenePhase) var scenePhase 
+    @State private var hasEntered: Bool = false
+    
+
+    @StateObject private var state = AppState()
+    
+    let deepOrange = Color(red: 0.85, green: 0.4, blue: 0.0)
     
     var body: some View {
-        Group {
-            if !state.hasCompletedOnboarding {
-                OnboardingView()
+        ZStack {
+            Color.black.ignoresSafeArea()
+            
+            if hasEntered {
+
+                TabView {
+                    NavigationView {
+                        TrainHubView() 
+                    }
+                    .tabItem {
+                        Image(systemName: "brain.head.profile")
+                        Text("Train Hub")
+                    }
+                    
+                    NavigationView {
+                        FamilyProgressView() 
+                    }
+                    .tabItem {
+                        Image(systemName: "chart.bar.doc.horizontal")
+                        Text("Dashboard")
+                    }
+                }
+                .accentColor(deepOrange)
+                .preferredColorScheme(.dark)
+                .environmentObject(state)
+                
             } else {
-                MainTabView()
+                VStack(spacing: 50) {
+                    Spacer()
+                    
+                    ZStack {
+                        Image(systemName: "hourglass")
+                            .font(.system(size: 100, weight: .ultraLight))
+                            .foregroundColor(.white.opacity(0.8))
+                        
+                        Image(systemName: "heart.fill")
+                            .font(.system(size: 35))
+                            .foregroundColor(deepOrange)
+                            .offset(y: 25)
+                            .shadow(color: deepOrange.opacity(0.8), radius: 10)
+                    }
+                    
+                    VStack(spacing: 15) {
+                        Text("Linger")
+                            .font(.system(size: 56, weight: .heavy, design: .serif))
+                            .foregroundColor(.white)
+                            .tracking(2)
+                        
+                        Text("Hold onto time, gently.")
+                            .font(.system(size: 22, weight: .medium))
+                            .foregroundColor(.gray)
+                    }
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        AudioManager.shared.startBGM()
+                        hasEntered = true
+                    }) {
+                        Text("Enter")
+                            .font(.system(size: 24, weight: .bold))
+                            .frame(width: 200)
+                            .padding(.vertical, 16)
+                            .background(deepOrange)
+                            .foregroundColor(.white)
+                            .cornerRadius(20)
+                    }
+                    .padding(.bottom, 80)
+                }
             }
-        }
-        .environmentObject(state)
-        .environment(\.managedObjectContext, CoreDataManager.shared.container.viewContext)
-        .preferredColorScheme(.dark)
-        .onAppear {
-            AudioManager.shared.startBGM()
-        }
-        // 🌟 核心修复：一旦 App 进入后台或被停止，立刻强行停止音乐！
-        .onChange(of: scenePhase) { oldPhase, newPhase in
-            if newPhase == .active {
-                AudioManager.shared.startBGM()
-            } else if newPhase == .background || newPhase == .inactive {
-                AudioManager.shared.stopBGM()
-            }
-        }
-        .onDisappear {
-            // 双保险：界面销毁时也停止播放
-            AudioManager.shared.stopBGM()
         }
     }
 }
 
-struct MainTabView: View {
+
+struct GameCard: View {
+    let title: String
+    let icon: String
+    let destination: AnyView
+    
+    let deepOrange = Color(red: 0.85, green: 0.4, blue: 0.0)
+    let darkGrayCard = Color(white: 0.15)
+    
     var body: some View {
-        TabView {
-            TrainHubView()
-                .tabItem { Label("Fitness", systemImage: "brain") }
-            FamilyProgressView()
-                .tabItem { Label("Family", systemImage: "person.2") }
-            HelpCenterView()
-                .tabItem { Label("Help", systemImage: "questionmark.circle") }
+        NavigationLink(destination: destination) {
+            VStack(spacing: 20) {
+                Image(systemName: icon)
+                    .font(.system(size: 45))
+                    .foregroundColor(deepOrange)
+                
+                Text(title)
+                    .font(.system(size: 20, weight: .bold))
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 160)
+            .background(darkGrayCard)
+            .cornerRadius(20)
+            .shadow(color: Color.black.opacity(0.5), radius: 10, x: 0, y: 5)
         }
-        .accentColor(Color(red: 0.85, green: 0.4, blue: 0.0)) 
     }
 }
+
+

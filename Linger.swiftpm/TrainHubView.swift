@@ -16,7 +16,7 @@ struct TrainHubView: View {
                         
                         NavigationLink(destination: DailySmellTaskView()) { TrainingCard(title: "Daily Senses", subtitle: "Wake up your sense of smell", iconName: "nose.fill", accentColor: deepOrange) }
                         
-                        // 🌟 换成了全新的 Sequence Tracking (循迹追踪)
+
                         NavigationLink(destination: SequentialMemoryView()) { TrainingCard(title: "Sequence Tracking", subtitle: "Follow the flashing order", iconName: "sparkles.rectangle.stack.fill", accentColor: deepOrange) }
                         
                         NavigationLink(destination: MathFitnessView()) { TrainingCard(title: "Math Fitness", subtitle: "Keep your mind sharp with numbers", iconName: "plus.forwardslash.minus", accentColor: deepOrange) }
@@ -50,5 +50,11 @@ struct TrainingCard: View {
             Spacer()
             Image(systemName: "chevron.right").font(.system(size: 30, weight: .bold)).foregroundColor(accentColor.opacity(0.8))
         }.padding(20).frame(maxWidth: .infinity).background(Color(white: 0.12)).cornerRadius(20).shadow(color: accentColor.opacity(0.15), radius: 10, x: 0, y: 5).padding(.horizontal)
+    }
+}
+struct TrainHubView_Previews: PreviewProvider {
+    static var previews: some View {
+        TrainHubView()
+            .environmentObject(AppState())
     }
 }

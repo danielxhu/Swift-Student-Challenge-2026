@@ -1,15 +1,14 @@
 import SwiftUI
 
-// MARK: - 本地静态数据模型
+
 struct EverydayItem: Identifiable, Hashable {
     let id = UUID()
     let name: String
-    let imageName: String // 之后替换为你导入的本地 JPEG 名称
-    let isSystemImage: Bool // 仅用于 MVP 演示，后期可删除
+    let imageName: String 
+    let isSystemImage: Bool 
 }
 
 class ItemRecallViewModel: ObservableObject {
-    // 模拟本地 80 个日常物品库 (这里精简演示)
     let allDatabaseItems: [EverydayItem] = [
         EverydayItem(name: "Coffee Cup", imageName: "cup.and.saucer.fill", isSystemImage: true),
         EverydayItem(name: "House Keys", imageName: "key.fill", isSystemImage: true),
@@ -39,7 +38,6 @@ class ItemRecallViewModel: ObservableObject {
         case learn, test, success
     }
     
-    // 难度配置规则: [记忆数量, 干扰数量]
     let difficultySettings = [
         1: (3, 2),
         2: (4, 3),
@@ -57,39 +55,37 @@ class ItemRecallViewModel: ObservableObject {
         let memoryCount = settings.0
         let distractorCount = settings.1
         
-        // 随机抽取物品
         var shuffledDB = allDatabaseItems.shuffled()
         memorizedItems = Array(shuffledDB.prefix(memoryCount))
         shuffledDB.removeFirst(memoryCount)
         
         let distractors = Array(shuffledDB.prefix(distractorCount))
         
-        // 生成测试网格（记忆物品 + 干扰物品，并打乱）
+
         testGridItems = (memorizedItems + distractors).shuffled()
     }
     
     func handleTap(on item: EverydayItem) {
         if memorizedItems.contains(item) {
-            // 正确选择：播放正向反馈并保持选中
+
             selectedItemIDs.insert(item.id)
             let positivePraises = ["Well done!", "Great job!", "Perfect!", "Wonderful work!"]
             feedbackMessage = positivePraises.randomElement()!
             
-            // 检查是否全部找到
+
             if selectedItemIDs.count == memorizedItems.count {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                     self.phase = .success
                 }
             }
         } else {
-            // 错误选择：绝对零惩罚，中性提示
+
             feedbackMessage = "Let's try another choice! Take all the time you need."
         }
     }
 }
 
-// MARK: - 主视图
-// MARK: - 主视图 (黑橙护眼版)
+
 struct ItemRecallView: View {
     @EnvironmentObject var state: AppState
     @Environment(\.presentationMode) var presentationMode
@@ -101,7 +97,7 @@ struct ItemRecallView: View {
     
     var body: some View {
         ZStack {
-            Color.black.ignoresSafeArea() // 全局纯黑背景
+            Color.black.ignoresSafeArea() 
             
             VStack {
                 topNavBar
@@ -123,7 +119,7 @@ struct ItemRecallView: View {
         }
     }
     
-    // MARK: - 顶部导航栏
+
     var topNavBar: some View {
         HStack {
             Button(action: { presentationMode.wrappedValue.dismiss() }) {
@@ -160,7 +156,7 @@ struct ItemRecallView: View {
                         VStack {
                             itemImage(for: item)
                                 .frame(width: 120, height: 120)
-                                .background(darkGrayCard) // 深灰卡片
+                                .background(darkGrayCard) 
                                 .cornerRadius(20)
                                 .shadow(color: deepOrange.opacity(0.1), radius: 5, x: 0, y: 5)
                             
@@ -182,7 +178,7 @@ struct ItemRecallView: View {
                     .font(.system(size: state.fontSize(32), weight: .bold))
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(deepOrange) // 深橙色大按钮
+                    .background(deepOrange) 
                     .foregroundColor(.white)
                     .cornerRadius(16)
                     .padding()
@@ -190,7 +186,7 @@ struct ItemRecallView: View {
         }
     }
     
-    // MARK: - Test Mode
+
     var testPhaseView: some View {
         VStack(spacing: 20) {
             Text("Tap all the items you saw!")
@@ -231,7 +227,6 @@ struct ItemRecallView: View {
         }
     }
     
-    // MARK: - Success Mode
     var successPhaseView: some View {
         VStack(spacing: 40) {
             Image(systemName: "star.circle.fill").font(.system(size: 100)).foregroundColor(deepOrange)
@@ -269,7 +264,7 @@ struct ItemRecallView: View {
     func itemImage(for item: EverydayItem) -> some View {
         if item.isSystemImage {
             Image(systemName: item.imageName)
-                .resizable().scaledToFit().padding(30).foregroundColor(deepOrange) // 系统图标也变成橙色
+                .resizable().scaledToFit().padding(30).foregroundColor(deepOrange) 
         } else {
             Image(item.imageName).resizable().scaledToFit().padding(10)
         }
